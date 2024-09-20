@@ -4,9 +4,9 @@ import { requestGateway } from './requestGateway/requestGateway';
 import { sendDynamoDbRequest } from './sendDynamoDbRequest/sendDynamoDbRequest';
 
 const processItem = async (content) => {
-  const id = await requestGateway(content);
+  const { id, url } = await requestGateway(content);
   await sendDynamoDbRequest(content, id);
-  return content.token;
+  return { token: content.token, url };
 };
 
 const handler = async (event, context) => {
@@ -16,10 +16,10 @@ const handler = async (event, context) => {
     content.token = uuid4();
     const validate = parseRequest(content);
     if (validate) {
-      const token = await processItem(content);
+      const response = await processItem(content);
       return {
         statusCode: 200,
-        body: JSON.stringify({ token }),
+        body: JSON.stringify({ ...response }),
       };
     }
     return {
