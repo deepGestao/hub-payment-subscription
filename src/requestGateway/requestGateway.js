@@ -17,16 +17,9 @@ const requestGateway = async (content) => {
     process.env.MERCADO_PAGO_SUBSCRIPTION,
     {
       payer_email: content.email,
-      auto_recurring: {
-        frequency: content.frequency,
-        frequency_type: content.frequencyType,
-        transaction_amount: content.amount,
-        currency_id: 'BRL',
-      },
-      back_url: content.backUrl,
-      reason: content.reason,
+      preapproval_plan_id: content.planId,
+      card_token_id: content.cardToken,
       external_reference: content.token,
-      status: 'pending',
     },
     getConfig(token),
   );

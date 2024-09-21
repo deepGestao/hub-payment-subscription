@@ -7,15 +7,12 @@ const getRequestBody = () => ({
 });
 
 const getAccessToken = async () => {
-  let token = process.env.MERCADO_PAGO_ACCESS_TOKEN;
-  if (process.env.AWS_ENV === 'prod') {
-    const { data } = await axios.post(
-      `${process.env.MERCADO_PAGO_OAUTH}`,
-      getRequestBody(),
-    );
-    token = data.access_token;
-  }
-  return token;
+  const { data } = await axios.post(
+    `${process.env.MERCADO_PAGO_OAUTH}`,
+    getRequestBody(),
+  );
+
+  return data.access_token;
 };
 
 export { getAccessToken };
