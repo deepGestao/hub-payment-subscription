@@ -17,13 +17,13 @@ const requestGateway = async (content) => {
     `${process.env.MERCADO_PAGO_SUBSCRIPTION}/${content.id}`,
     getConfig(token),
   );
-  await axios.patch(
-    `${process.env.MERCADO_PAGO_PLAN}/${data.preapproval_plan_id}`,
-    {
-      status: 'cancelled',
-    },
-    getConfig(token),
-  );
+  // await axios.patch(
+  //   `${process.env.MERCADO_PAGO_PLAN}/${data.preapproval_plan_id}`,
+  //   {
+  //     status: 'cancelled',
+  //   },
+  //   getConfig(token),
+  // );
   return {
     id: data.id,
     planId: data.preapproval_plan_id,

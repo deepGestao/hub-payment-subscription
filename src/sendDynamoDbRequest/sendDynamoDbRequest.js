@@ -12,7 +12,7 @@ const sendDynamoDbRequest = async (content, gatewayId, planId, token) => {
         createdAt: { S: `${new Date().toISOString()}` },
         gatewayId: { S: `mercadopago|${gatewayId}` },
         webhookId: { S: `${content.token}` },
-        status: { S: 'pending' },
+        status: { S: 'active' },
       },
     })
     .promise();
