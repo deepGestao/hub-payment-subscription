@@ -13,19 +13,20 @@ const getConfig = (token) => ({
 
 const requestGateway = async (content) => {
   const token = await getAccessToken();
-  const { data } = await axios.post(
-    process.env.MERCADO_PAGO_SUBSCRIPTION,
+  const { data } = await axios.get(
+    `${process.env.MERCADO_PAGO_SUBSCRIPTION}/${content.id}`,
+    getConfig(token),
+  );
+  await axios.patch(
+    `${process.env.MERCADO_PAGO_PLAN}/${data.preapproval_plan_id}`,
     {
-      payer_email: content.email,
-      preapproval_plan_id: content.planId,
-      card_token_id: content.cardToken,
-      external_reference: content.token,
+      status: 'cancelled',
     },
     getConfig(token),
   );
   return {
     id: data.id,
-    url: data.init_point,
+    planId: data.preapproval_plan_id,
   };
 };
 

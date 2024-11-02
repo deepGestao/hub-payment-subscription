@@ -4,16 +4,15 @@ import { requestGateway } from './requestGateway/requestGateway';
 import { sendDynamoDbRequest } from './sendDynamoDbRequest/sendDynamoDbRequest';
 
 const processItem = async (content) => {
-  const { id, url } = await requestGateway(content);
-  await sendDynamoDbRequest(content, id);
-  return { token: content.token, url };
+  const { id, planId } = await requestGateway(content);
+  await sendDynamoDbRequest(content, id, planId, uuid4());
+  return { token: content.token, planId };
 };
 
 const handler = async (event, context) => {
   console.log(event, context);
   try {
-    const content = JSON.parse(event.body);
-    content.token = uuid4();
+    const content = JSON.parse(event.body).detail;
     const validate = parseRequest(content);
     if (validate) {
       const response = await processItem(content);
@@ -29,7 +28,7 @@ const handler = async (event, context) => {
   } catch (e) {
     console.error(e);
     return {
-      statusCode: 400,
+      statusCode: 500,
       body: JSON.stringify({ message: 'internal server error' }),
     };
   }
